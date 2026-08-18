@@ -1,11 +1,17 @@
 from flask_sqlalchemy import SQLAlchemy
-from datetime import timedelta
+from datetime import timedelta, date
 
 db = SQLAlchemy()
 
 def week_start_for(d):
     """Return the Monday of the week containing date d."""
     return d - timedelta(days=d.weekday())
+
+def pay_period_start_for(d):
+    """Return the start day of the pay period"""
+    anchor_date = date(2026, 7, 31)
+    period = (d - anchor_date).days // 14
+    return anchor_date + timedelta(days=(period*14))
 
 class Shift(db.Model):
     __tablename__="shift"
@@ -25,6 +31,7 @@ class Destination(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     type = db.Column(db.String, nullable=True)
+    current_balance = db.Column(db.Float, nullable=False, default=0.0)
 
 class AllocationRule(db.Model):
     __tablename__ = "allocation_rule"
@@ -44,7 +51,7 @@ class AllocationLog(db.Model):
     __tablename__ = "allocation_log"
     id = db.Column(db.Integer, primary_key=True)
     destination_id = db.Column(db.Integer, db.ForeignKey("destination.id"), nullable=False)
-    week_start = db.Column(db.Date, nullable=False)
+    pay_period_start = db.Column(db.Date, nullable=False)
     amount = db.Column(db.Float, nullable=False)
 
     destination = db.relationship("Destination", backref="allocation_log")
