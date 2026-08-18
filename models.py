@@ -1,0 +1,50 @@
+from flask_sqlalchemy import SQLAlchemy
+from datetime import timedelta
+
+db = SQLAlchemy()
+
+def week_start_for(d):
+    """Return the Monday of the week containing date d."""
+    return d - timedelta(days=d.weekday())
+
+class Shift(db.Model):
+    __tablename__="shift"
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.Date, nullable=False)
+    shift_type = db.Column(db.String(2), nullable=False)
+    hours_worked = db.Column(db.Float, nullable=False)
+    cash_tips = db.Column(db.Float, nullable=False, default=0.0)
+    card_tips = db.Column(db.Float, nullable=False, default=0.0)
+
+    @property
+    def week_start(self):
+        return week_start_for(self.date)
+
+class Destination(db.Model):
+    __tablename__ = "destination"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    type = db.Column(db.String, nullable=True)
+
+class AllocationRule(db.Model):
+    __tablename__ = "allocation_rule"
+    id = db.Column(db.Integer, primary_key=True)
+    destination_id = db.Column(db.Integer, db.ForeignKey("destination.id"), nullable=False)
+    percentage = db.Column(db.Integer, nullable=False)
+
+    destination = db.relationship("Destination", backref='allocation_rules', )
+
+class Settings(db.Model):
+    __tablename__ = "settings"
+    id = db.Column(db.Integer, primary_key=True)
+    checking_buffer = db.Column(db.Float, default=100.00, nullable=False)
+    debt_payment_amount = db.Column(db.Float, default=250.00, nullable=False)
+
+class AllocationLog(db.Model):
+    __tablename__ = "allocation_log"
+    id = db.Column(db.Integer, primary_key=True)
+    destination_id = db.Column(db.Integer, db.ForeignKey("destination.id"), nullable=False)
+    week_start = db.Column(db.Date, nullable=False)
+    amount = db.Column(db.Float, nullable=False)
+
+    destination = db.relationship("Destination", backref="allocation_log")
