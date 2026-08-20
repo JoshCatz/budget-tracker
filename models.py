@@ -55,3 +55,13 @@ class AllocationLog(db.Model):
     amount = db.Column(db.Float, nullable=False)
 
     destination = db.relationship("Destination", backref="allocation_log")
+
+class PayPeriod(db.Model):
+    __tablename__ = "pay_period"
+    id = db.Column(db.Integer, primary_key=True)
+    start_date = db.Column(db.Date, nullable=False, unique=True)
+    is_finalized = db.Column(db.Boolean, nullable=False, default=False)
+    real_debt_payment = db.Column(db.Float, nullable=False, default=0.0)
+    total_tips = db.Column(db.Float, nullable=False, default=0.0)
+    checking_buffer_used = db.Column(db.Float, nullable=False)
+    debt_payment_target = db.Column(db.Float, nullable=False)
