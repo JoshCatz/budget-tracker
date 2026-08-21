@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}{{ "Edit" if shift else "Add" }} Shift — Tip Tracker{% endblock %}
+
+{% block content %}
+<h1 class="font-display text-3xl text-white mb-8">{{ "Edit Shift" if shift else "Log a Shift" }}</h1>
+
+<form method="POST" class="space-y-6 max-w-md">
+  <div>
+    <label class="font-mono text-xs text-gray-400 uppercase tracking-wider block mb-2">Date</label>
+    <input type="date" name="date" required
+           value="{{ shift.date.isoformat() if shift else '' }}"
+           class="w-full bg-transparent border border-line rounded-lg px-4 py-3 text-white focus:border-accent focus:outline-none">
+  </div>
+
+  <div>
+    <label class="font-mono text-xs text-gray-400 uppercase tracking-wider block mb-2">Shift</label>
+    <select name="shift_type" required
+            class="w-full bg-black border border-line rounded-lg px-4 py-3 text-white focus:border-accent focus:outline-none">
+      <option value="AM" {% if shift and shift.shift_type == "AM" %}selected{% endif %}>AM</option>
+      <option value="PM" {% if shift and shift.shift_type == "PM" %}selected{% endif %}>PM</option>
+    </select>
+  </div>
+
+  <div>
+    <label class="font-mono text-xs text-gray-400 uppercase tracking-wider block mb-2">Hours Worked</label>
+    <input type="number" step="0.25" name="hours_worked" required
+           value="{{ shift.hours_worked if shift else '' }}"
+           class="w-full bg-transparent border border-line rounded-lg px-4 py-3 text-white focus:border-accent focus:outline-none">
+  </div>
+
+  <div class="grid grid-cols-2 gap-4">
+    <div>
+      <label class="font-mono text-xs text-gray-400 uppercase tracking-wider block mb-2">Cash Tips</label>
+      <input type="number" step="0.01" name="cash_tips"
+             value="{{ shift.cash_tips if shift else 0 }}"
+             class="w-full bg-transparent border border-line rounded-lg px-4 py-3 text-white focus:border-accent focus:outline-none">
+    </div>
+    <div>
+      <label class="font-mono text-xs text-gray-400 uppercase tracking-wider block mb-2">Card Tips</label>
+      <input type="number" step="0.01" name="card_tips"
+             value="{{ shift.card_tips if shift else 0 }}"
+             class="w-full bg-transparent border border-line rounded-lg px-4 py-3 text-white focus:border-accent focus:outline-none">
+    </div>
+  </div>
+
+  <div class="flex gap-4 pt-2">
+    <button type="submit" class="px-5 py-3 bg-accent text-black text-sm font-semibold rounded-lg hover:bg-white transition-colors">
+      {{ "Save changes" if shift else "Add shift" }}
+    </button>
+    <a href="{{ url_for('shifts.shifts_list') }}" class="px-5 py-3 border border-line text-sm font-semibold rounded-lg text-gray-300 hover:border-accent hover:text-accent transition-colors">
+      Cancel
+    </a>
+  </div>
+</form>
+{% endblock %}

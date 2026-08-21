@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Tip Tracker{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          bg: '#000000',
+          line: '#1f1f1f',
+          accent: '#5FB3B3',
+          muted: '#8a8a8a',
+        },
+        fontFamily: {
+          display: ['"Space Grotesk"', 'sans-serif'],
+          body: ['Inter', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'monospace'],
+        },
+      },
+    },
+  }
+</script>
+</head>
+<body class="bg-bg text-gray-200 font-body min-h-screen">
+
+  <nav class="border-b border-line">
+    <div class="max-w-4xl mx-auto px-6 py-5 flex items-center justify-between">
+      <a href="{{ url_for('dashboard') }}" class="font-mono text-sm text-accent tracking-widest uppercase">
+        &lt;tip_tracker /&gt;
+      </a>
+      <div class="flex gap-6 font-mono text-sm">
+        <a href="{{ url_for('dashboard') }}" class="text-gray-400 hover:text-accent transition-colors">dashboard</a>
+        <a href="{{ url_for('shifts.shifts_list') }}" class="text-gray-400 hover:text-accent transition-colors">shifts</a>
+        <a href="{{ url_for('settings.settings_page') }}" class="text-gray-400 hover:text-accent transition-colors">settings</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="max-w-4xl mx-auto px-6 py-12">
+    {% block content %}{% endblock %}
+  </main>
+
+</body>
+</html>

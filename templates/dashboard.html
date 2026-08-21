@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Tip Tracker{% endblock %}
+
+{% block content %}
+<p class="font-mono text-xs text-accent tracking-widest uppercase mb-2"># pay_periods</p>
+<h1 class="font-display text-3xl text-white mb-10">Your Periods</h1>
+
+<div class="space-y-6">
+  {% for card in cards %}
+    <div class="border {{ 'border-accent/40' if card.is_finalized else 'border-line' }} rounded-lg p-6">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <p class="font-display text-lg text-white">
+            {{ card.period_start.strftime('%b %d') }} – {{ card.period_end.strftime('%b %d, %Y') }}
+          </p>
+          <p class="font-mono text-xs {{ 'text-accent' if card.is_finalized else 'text-gray-500' }} mt-1 uppercase tracking-wider">
+            {{ "finalized" if card.is_finalized else "in progress" }}
+          </p>
+        </div>
+        <p class="font-display text-2xl text-white">${{ "%.2f"|format(card.total_tips) }}</p>
+      </div>
+
+      {% if card.is_finalized %}
+        <div class="grid sm:grid-cols-2 gap-3 mb-4">
+          <div class="border border-line rounded-lg px-4 py-3">
+            <p class="font-mono text-xs text-muted uppercase mb-1">checking buffer used</p>
+            <p class="text-white text-sm">${{ "%.2f"|format(card.checking_buffer_used) }}</p>
+          </div>
+          <div class="border border-line rounded-lg px-4 py-3">
+            <p class="font-mono text-xs text-muted uppercase mb-1">debt paid (target ${{ "%.2f"|format(card.debt_payment_target) }})</p>
+            <p class="text-white text-sm">${{ "%.2f"|format(card.real_debt_payment) }}</p>
+          </div>
+        </div>
+        <div class="space-y-2">
+          {% for alloc in card.allocations %}
+            <div class="flex justify-between font-mono text-xs text-gray-400 border-b border-line pb-2">
+              <span>{{ alloc.name }}</span>
+              <span class="text-white">${{ "%.2f"|format(alloc.amount) }}</span>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-gray-500 text-sm mb-4">{{ card.shifts|length }} shift(s) logged so far.</p>
+        <form action="{{ url_for('allocation.allocate', date=card.period_start.isoformat()) }}" method="POST">
+          <button type="submit" class="px-5 py-3 bg-accent text-black text-sm font-semibold rounded-lg hover:bg-white transition-colors">
+            Calculate
+          </button>
+        </form>
+      {% endif %}
+    </div>
+  {% endfor %}
+</div>
+
+<a href="{{ url_for('shifts.make_shift') }}" class="inline-block mt-8 px-5 py-3 border border-line text-sm font-semibold rounded-lg text-gray-300 hover:border-accent hover:text-accent transition-colors">
+  + Log a shift
+</a>
+{% endblock %}

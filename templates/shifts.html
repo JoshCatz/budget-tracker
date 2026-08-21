@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Shifts — Tip Tracker{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-between mb-8">
+  <div>
+    <p class="font-mono text-xs text-accent tracking-widest uppercase mb-2"># shifts</p>
+    <h1 class="font-display text-3xl text-white">All Shifts</h1>
+  </div>
+  <a href="{{ url_for('shifts.make_shift') }}" class="px-5 py-3 bg-accent text-black text-sm font-semibold rounded-lg hover:bg-white transition-colors">
+    + Add shift
+  </a>
+</div>
+
+<div class="space-y-2">
+  {% for shift in shifts %}
+    <div class="border border-line rounded-lg px-5 py-4 grid sm:grid-cols-12 gap-2 sm:gap-4 items-center">
+      <div class="sm:col-span-3">
+        <p class="text-white text-sm">{{ shift.date.strftime('%b %d, %Y') }}</p>
+      </div>
+      <div class="sm:col-span-2 font-mono text-xs text-gray-400">{{ shift.shift_type }}</div>
+      <div class="sm:col-span-2 font-mono text-xs text-gray-400">{{ shift.hours_worked }} hrs</div>
+      <div class="sm:col-span-2 font-display text-white">${{ "%.2f"|format(shift.total_tips) }}</div>
+      <div class="sm:col-span-3 sm:text-right flex gap-4 sm:justify-end font-mono text-xs">
+        <a href="{{ url_for('shifts.edit', shift_id=shift.id) }}" class="text-gray-400 hover:text-accent transition-colors">edit</a>
+        <form action="{{ url_for('shifts.delete', shift_id=shift.id) }}" method="POST" onsubmit="return confirm('Delete this shift?');">
+          <button type="submit" class="text-gray-400 hover:text-red-400 transition-colors">delete</button>
+        </form>
+      </div>
+    </div>
+  {% else %}
+    <p class="text-gray-500 text-sm text-center py-10">No shifts logged yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}
