@@ -39,7 +39,7 @@ class AllocationRule(db.Model):
     destination_id = db.Column(db.Integer, db.ForeignKey("destination.id"), nullable=False)
     percentage = db.Column(db.Integer, nullable=False)
 
-    destination = db.relationship("Destination", backref='allocation_rules', )
+    destination = db.relationship("Destination", backref='allocation_rules')
 
 class Settings(db.Model):
     __tablename__ = "settings"
