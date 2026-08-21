@@ -1,0 +1,19 @@
+from flask import Blueprint, request
+from services.pay_period_summary import allocate_money, pay_period_summary
+from models import PayPeriod, pay_period_start_for
+from datetime import datetime
+
+allocate_bp = Blueprint("allocation", __name__, url_prefix="/allocate")
+
+@allocate_bp.route("/<date>", methods=["POST"])
+def allocate(date):
+    if request.method == "POST":
+        d = datetime.strptime(date, "%Y-%m-%d").date()
+        pay_period = PayPeriod.query.filter_by(start_date=pay_period_start_for(d)).first()
+
+        if pay_period and pay_period.is_finalized == True:
+            print("ERROR") # I'll handle this better later
+        else: 
+            return allocate_money(pay_period_summary(d))
+    else:
+        print("uh oh...")
