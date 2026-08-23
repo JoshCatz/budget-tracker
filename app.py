@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from models import db
 from api.shifts import shifts_bp
 
@@ -8,6 +8,12 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
 app.register_blueprint(shifts_bp)
+
+@app.route("/")
+def dashboard():
+    cards=[]
+    return render_template("dashboard.html", cards=cards)
+
 
 with app.app_context():
     db.create_all()
