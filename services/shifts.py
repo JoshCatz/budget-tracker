@@ -52,3 +52,10 @@ def update(shift_id):
 
     db.session.commit()
     return redirect(url_for("shifts.read_shift"))
+
+### DELETING A SHIFT ###
+def delete(shift_id):
+    shift = Shift.query.get_or_404(shift_id)
+
+    db.session.delete(shift)
+    db.session.commit()

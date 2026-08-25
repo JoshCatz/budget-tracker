@@ -1,7 +1,6 @@
 from flask import Blueprint, request, render_template
 
-from services.shifts import check_is_finalized, create, create_form, read, update, update_form
-from datetime import datetime
+from services.shifts import check_is_finalized, create, create_form, read, update, update_form, delete
 
 shifts_bp = Blueprint("shifts", __name__, url_prefix="/shifts")
 
@@ -29,7 +28,13 @@ def update_shift(shift_id):
 
 @shifts_bp.route("/<int:shift_id>/delete", methods=["GET", "POST"])
 def delete_shift(shift_id):
-    pass
-        
+    pay_period = check_is_finalized(shift_id)
+    if pay_period and pay_period.is_finalized:
+        return "ERROR"
+
+    if request.method == "POST":
+        return delete(shift_id)
+
+    return read()
 
 
