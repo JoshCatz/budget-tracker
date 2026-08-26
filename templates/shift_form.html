@@ -47,7 +47,7 @@
     <button type="submit" class="px-5 py-3 bg-accent text-black text-sm font-semibold rounded-lg hover:bg-white transition-colors">
       {{ "Save changes" if shift else "Add shift" }}
     </button>
-    <a href="{{ url_for('shifts.shifts_list') }}" class="px-5 py-3 border border-line text-sm font-semibold rounded-lg text-gray-300 hover:border-accent hover:text-accent transition-colors">
+    <a href="{{ url_for('shifts.read_shift') }}" class="px-5 py-3 border border-line text-sm font-semibold rounded-lg text-gray-300 hover:border-accent hover:text-accent transition-colors">
       Cancel
     </a>
   </div>

@@ -31,13 +31,13 @@
 
   <nav class="border-b border-line">
     <div class="max-w-4xl mx-auto px-6 py-5 flex items-center justify-between">
-      <a href="{{ url_for('dashboard') }}" class="font-mono text-sm text-accent tracking-widest uppercase">
+      <a href="{{ url_for('dashboard.read_dashboard') }}" class="font-mono text-sm text-accent tracking-widest uppercase">
         &lt;tip_tracker /&gt;
       </a>
       <div class="flex gap-6 font-mono text-sm">
-        <a href="{{ url_for('dashboard') }}" class="text-gray-400 hover:text-accent transition-colors">dashboard</a>
-        <a href="{{ url_for('shifts.shifts_list') }}" class="text-gray-400 hover:text-accent transition-colors">shifts</a>
-        <a href="{{ url_for('settings.settings_page') }}" class="text-gray-400 hover:text-accent transition-colors">settings</a>
+        <a href="{{ url_for('dashboard.read_dashboard') }}" class="text-gray-400 hover:text-accent transition-colors">dashboard</a>
+        <a href="{{ url_for('shifts.read_shift') }}" class="text-gray-400 hover:text-accent transition-colors">shifts</a>
+        <a href="{{ url_for('settings.settings') }}" class="text-gray-400 hover:text-accent transition-colors">settings</a>
       </div>
     </div>
   </nav>

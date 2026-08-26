@@ -11,7 +11,7 @@ def update():
     settings = Settings.query.first()
 
     settings.checking_buffer = float(request.form["checking_buffer"])
-    settings.debt_payment_amount = float(request.form["debt_payment"])
+    settings.debt_payment_amount = float(request.form["debt_payment_amount"])
  
     db.session.commit()
-    return redirect(url_for("shifts.read_shifts"))
+    return redirect(url_for("dashboard.read_dashboard"))
