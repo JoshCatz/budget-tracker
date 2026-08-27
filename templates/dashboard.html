@@ -45,7 +45,7 @@
           {% else %}
             <p class="text-gray-500 text-sm mb-4">{{ card.shifts|length }} shift(s) logged so far.</p>
             <form action="{{ url_for('allocation.allocate', date=card.period_start.isoformat()) }}" method="POST"
-      onsubmit="return confirm('Finalize this period? This cannot be undone.');">
+      onsubmit="return checkLoggedIn() && confirm('Finalize this period? This cannot be undone.');">
               <button type="submit" class="px-5 py-3 bg-accent text-black text-sm font-semibold rounded-lg hover:bg-white transition-colors">
                 Calculate
               </button>
@@ -64,7 +64,7 @@
     <p class="font-mono text-xs text-accent tracking-widest uppercase mb-2"># balances</p>
     <h2 class="font-display text-xl text-white mb-6">Account Balances</h2>
 
-    <form method="POST" action="{{ url_for('balances.balances') }}" class="border border-line rounded-lg p-5 space-y-4">
+    <form method="POST" action="{{ url_for('balances.balances') }}" class="border border-line rounded-lg p-5 space-y-4" onsubmit="return checkLoggedIn();">
       {% for dest in destinations %}
         <div>
           <label class="font-mono text-xs text-gray-400 uppercase tracking-wider block mb-2">{{ dest.name }}</label>

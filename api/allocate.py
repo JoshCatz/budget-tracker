@@ -1,11 +1,13 @@
-from flask import Blueprint, request, render_template, redirect, url_for
+from flask import Blueprint, request, redirect, url_for
 from services.pay_period_summary import allocate_money, pay_period_summary
 from models import PayPeriod, pay_period_start_for
 from datetime import datetime
+from flask_login import login_required
 
 allocate_bp = Blueprint("allocation", __name__, url_prefix="/allocate")
 
 @allocate_bp.route("/<date>", methods=["POST"])
+@login_required
 def allocate(date):
     if request.method == "POST":
         d = datetime.strptime(date, "%Y-%m-%d").date()

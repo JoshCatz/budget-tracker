@@ -1,5 +1,9 @@
-from models import db, Destination, Settings, AllocationRule
+from models import db, Destination, Settings, AllocationRule, User
+from dotenv import load_dotenv
+import os
+from werkzeug.security import generate_password_hash
 
+load_dotenv()
 
 def seed_defaults():
     """Create default Destinations, Settings, and AllocationRules if none exist yet."""
@@ -28,5 +32,15 @@ def seed_defaults():
         db.session.add(AllocationRule(destination_id=savings_dest.id, percentage=60))
     if stock_dest.id not in existing_rule_destinations:
         db.session.add(AllocationRule(destination_id=stock_dest.id, percentage=40))
+
+    db.session.commit()
+
+def seed_admin_user():
+
+    if User.query.first() is None:
+            db.session.add(User(
+                 username=os.environ.get("ADMIN_USERNAME"),
+                 password_hash=generate_password_hash(os.environ.get("ADMIN_PASSWORD"))
+            ))
 
     db.session.commit()

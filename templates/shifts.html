@@ -22,8 +22,11 @@
       <div class="sm:col-span-2 font-mono text-xs text-gray-400">{{ shift.hours_worked }} hrs</div>
       <div class="sm:col-span-2 font-display text-white">${{ "%.2f"|format(shift.total_tips) }}</div>
       <div class="sm:col-span-3 sm:text-right flex gap-4 sm:justify-end font-mono text-xs">
-        <a href="{{ url_for('shifts.update_shift', shift_id=shift.id) }}" class="text-gray-400 hover:text-accent transition-colors">edit</a>
-        <form action="{{ url_for('shifts.delete_shift', shift_id=shift.id) }}" method="POST" onsubmit="return confirm('Delete this shift?');">
+        <a href="{{ url_for('shifts.update_shift', shift_id=shift.id) }}"
+           onclick="{% if shift.is_period_finalized %}alert('This shift belongs to a finalized period and cannot be edited.'); return false;{% endif %}"
+           class="text-gray-400 hover:text-accent transition-colors">edit</a>
+        <form action="{{ url_for('shifts.delete_shift', shift_id=shift.id) }}" method="POST"
+              onsubmit="{% if shift.is_period_finalized %}alert('This shift belongs to a finalized period and cannot be deleted.'); return false;{% endif %}return checkLoggedIn() && confirm('Delete this shift?');">
           <button type="submit" class="text-gray-400 hover:text-red-400 transition-colors">delete</button>
         </form>
       </div>

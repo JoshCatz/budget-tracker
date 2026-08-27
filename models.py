@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import timedelta, date
+from flask_login import UserMixin
 
 db = SQLAlchemy()
 
@@ -29,6 +30,12 @@ class Shift(db.Model):
     @property
     def total_tips(self):
         return round(self.cash_tips + self.card_tips, 2)
+
+    @property
+    def is_period_finalized(self):
+        period_start = pay_period_start_for(self.date)
+        period = PayPeriod.query.filter_by(start_date=period_start).first()
+        return period is not None and period.is_finalized
 
 class Destination(db.Model):
     __tablename__ = "destination"
@@ -69,3 +76,9 @@ class PayPeriod(db.Model):
     total_tips = db.Column(db.Float, nullable=False, default=0.0)
     checking_buffer_used = db.Column(db.Float, nullable=False)
     debt_payment_target = db.Column(db.Float, nullable=False)
+
+class User(UserMixin, db.Model):
+    __tablename__ = "users"
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String, nullable=False)
+    password_hash = db.Column(db.String, nullable=False)

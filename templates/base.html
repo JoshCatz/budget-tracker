@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
+  const isLoggedIn = {{ 'true' if current_user.is_authenticated else 'false' }};
   tailwind.config = {
     theme: {
       extend: {
@@ -25,6 +26,13 @@
       },
     },
   }
+  function checkLoggedIn() {
+    if (!isLoggedIn) {
+      alert("This action requires sign in.");
+      return false; // stops the form from submitting at all
+    }
+    return true; // allows it through normally
+  }
 </script>
 </head>
 <body class="bg-bg text-gray-200 font-body min-h-screen">
@@ -38,6 +46,13 @@
         <a href="{{ url_for('dashboard.read_dashboard') }}" class="text-gray-400 hover:text-accent transition-colors">dashboard</a>
         <a href="{{ url_for('shifts.read_shift') }}" class="text-gray-400 hover:text-accent transition-colors">shifts</a>
         <a href="{{ url_for('settings.settings') }}" class="text-gray-400 hover:text-accent transition-colors">settings</a>
+        {% if current_user.is_authenticated %}
+          <form method="POST" action="{{ url_for('login.logout') }}" class="inline">
+            <button type="submit" class="text-gray-400 hover:text-accent transition-colors font-mono text-sm">logout</button>
+          </form>
+        {% else %}
+          <a href="{{ url_for('login.login') }}" class="text-gray-400 hover:text-accent transition-colors font-mono text-sm">sign in</a>
+        {% endif %}
       </div>
     </div>
   </nav>

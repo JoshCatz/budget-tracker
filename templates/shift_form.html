@@ -4,7 +4,7 @@
 {% block content %}
 <h1 class="font-display text-3xl text-white mb-8">{{ "Edit Shift" if shift else "Log a Shift" }}</h1>
 
-<form method="POST" class="space-y-6 max-w-md">
+<form method="POST" class="space-y-6 max-w-md" onsubmit="return checkLoggedIn();">
   <div>
     <label class="font-mono text-xs text-gray-400 uppercase tracking-wider block mb-2">Date</label>
     <input type="date" name="date" id="date-input" max="{{ today }}" min="2020-01-01" required
