@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, render_template, redirect, url_for
 from services.pay_period_summary import allocate_money, pay_period_summary
 from models import PayPeriod, pay_period_start_for
 from datetime import datetime
@@ -12,8 +12,8 @@ def allocate(date):
         pay_period = PayPeriod.query.filter_by(start_date=pay_period_start_for(d)).first()
 
         if pay_period and pay_period.is_finalized == True:
-            print("ERROR") # I'll handle this better later
+            return redirect(url_for("dashboard.read_dashboard"))
         else: 
             return allocate_money(pay_period_summary(d))
     else:
-        print("uh oh...")
+        return redirect(url_for("dashboard.read_dashboard"))

@@ -26,6 +26,10 @@ class Shift(db.Model):
     def week_start(self):
         return week_start_for(self.date)
 
+    @property
+    def total_tips(self):
+        return round(self.cash_tips + self.card_tips, 2)
+
 class Destination(db.Model):
     __tablename__ = "destination"
     id = db.Column(db.Integer, primary_key=True)

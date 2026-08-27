@@ -35,6 +35,5 @@ def delete_shift(shift_id):
     if request.method == "POST":
         return delete(shift_id)
 
-    return read()
 
 

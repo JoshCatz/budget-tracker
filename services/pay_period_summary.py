@@ -1,5 +1,6 @@
 from models import pay_period_start_for, Shift, AllocationRule, AllocationLog, Settings, Destination, PayPeriod, db
 from datetime import timedelta, datetime
+from flask import redirect, url_for
 
 def pay_period_summary(d):
     """receives a day as input and returns aggregate data for a given period"""
@@ -93,9 +94,10 @@ def allocate_money(period_summary):
         )
         db.session.add(account_log)
 
-
-
     db.session.commit()
+
+    return redirect(url_for("dashboard.read_dashboard"))
+
 
 
 

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 from flask import request, redirect, url_for, render_template
 
 from models import db, Shift, PayPeriod, pay_period_start_for
@@ -13,7 +13,7 @@ def check_is_finalized(shift_id):
 
 ### CREATING A SHIFT ###
 def create_form():
-    return render_template("shift_form.html", shift=None)
+    return render_template("shift_form.html", shift=None, today=date.today().isoformat())
 
 def create():
     parsed_date = datetime.strptime(request.form["date"], "%Y-%m-%d").date()
@@ -23,13 +23,13 @@ def create():
         shift_type=request.form["shift_type"],
         hours_worked=float(request.form["hours_worked"]),
         cash_tips=float(request.form.get("cash_tips") or 0),
-        credit_tips=float(request.form.get("credit_tips") or 0),
+        card_tips=float(request.form.get("card_tips") or 0),
     )
 
     db.session.add(shift)
     db.session.commit()
 
-    return redirect(url_for("shifts.create_shift"))
+    return redirect(url_for("shifts.read_shift"))
 
 ### READING SHIFTS ###
 def read():
@@ -39,7 +39,7 @@ def read():
 ### UPDATING A SHIFT ###
 def update_form(shift_id):
     shift = Shift.query.get_or_404(shift_id)
-    return render_template("shift_form.html", shift=shift)
+    return render_template("shift_form.html", shift=shift, today=date.today().isoformat())
 
 def update(shift_id):
     shift = Shift.query.get_or_404(shift_id)
@@ -59,3 +59,5 @@ def delete(shift_id):
 
     db.session.delete(shift)
     db.session.commit()
+
+    return redirect(url_for("shifts.read_shift"))

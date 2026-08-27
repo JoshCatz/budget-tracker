@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect, url_for
 from services.seed import seed_defaults
 from models import db, Settings
 from api.shifts import shifts_bp
@@ -21,6 +21,7 @@ app.register_blueprint(balances_bp)
 with app.app_context():
     db.create_all()
     seed_defaults()
+
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,7 +1,7 @@
 from datetime import datetime, date, timedelta
 from flask import request, redirect, url_for, render_template
 
-from models import db, AllocationRule, Shift, PayPeriod, Destination
+from models import db, AllocationLog, Shift, PayPeriod, Destination
 from services.pay_period_summary import pay_period_summary, pay_period_start_for
 
 def read():
@@ -9,7 +9,6 @@ def read():
     cards = []
     for i in range(4):
         period_start = current_start - timedelta(days=14*i)
-        allocations = AllocationRule.query.all()
         destinations = Destination.query.all()
         pay_period = pay_period_summary(period_start)
 
@@ -17,6 +16,7 @@ def read():
         is_finalized = existing is not None and existing.is_finalized
 
         if is_finalized:
+            allocations = AllocationLog.query.filter_by(pay_period_start=period_start).all()
             card = {
                 "is_finalized": is_finalized,
                 "period_start": pay_period["period_start"],
@@ -39,4 +39,4 @@ def read():
             }
         cards.append(card)
 
-    return render_template("dashboard.html", cards=cards)
+    return render_template("dashboard.html", cards=cards, destinations=destinations)

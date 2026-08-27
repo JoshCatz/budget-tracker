@@ -37,14 +37,15 @@
             <div class="space-y-2">
               {% for alloc in card.allocations %}
                 <div class="flex justify-between font-mono text-xs text-gray-400 border-b border-line pb-2">
-                  <span>{{ alloc.name }}</span>
+                  <span>{{ alloc.destination.name }}</span>
                   <span class="text-white">${{ "%.2f"|format(alloc.amount) }}</span>
                 </div>
               {% endfor %}
             </div>
           {% else %}
             <p class="text-gray-500 text-sm mb-4">{{ card.shifts|length }} shift(s) logged so far.</p>
-            <form action="{{ url_for('allocation.allocate', date=card.period_start.isoformat()) }}" method="POST">
+            <form action="{{ url_for('allocation.allocate', date=card.period_start.isoformat()) }}" method="POST"
+      onsubmit="return confirm('Finalize this period? This cannot be undone.');">
               <button type="submit" class="px-5 py-3 bg-accent text-black text-sm font-semibold rounded-lg hover:bg-white transition-colors">
                 Calculate
               </button>
