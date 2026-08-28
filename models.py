@@ -10,7 +10,7 @@ def week_start_for(d):
 
 def pay_period_start_for(d):
     """Return the start day of the pay period"""
-    anchor_date = date(2026, 7, 31)
+    anchor_date = date(2026, 8, 1)
     period = (d - anchor_date).days // 14
     return anchor_date + timedelta(days=(period*14))
 
